@@ -1,0 +1,24 @@
+test:
+  configuration:
+    date: 08-11-2019
+    time: 22:16
+    country: Poland
+    weather:
+      - cold
+      - rain
+      - cloudy
+project:
+  name: easeCI
+  author: Karol Meksuła
+  goal: Make CI process less frustrating and easy.
+  price: open source
+  licence: any yet
+
+property:
+  deep:
+    nested:
+      test:
+        is:
+          this:
+            will:
+              work: works well!
