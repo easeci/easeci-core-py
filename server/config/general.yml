@@ -1,3 +1,4 @@
 main:
   paths:
+    temp: /tmp/ease
     home: /usr/local/ease
