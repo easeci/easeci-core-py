@@ -117,17 +117,43 @@ Change value of one field in .yml config file
  `path` is absolute path to .yml file
  `val` is a tuple. First value in tuple is path to yml field for example: app.config.path
                    Second value in tuple is value of field to change
+Returns changed value
 """
 
 
 def yml_change(path, val):
-    pass
+    yaml_as_dict = yml_load(path)
+    refs = val[0].split('.')
+
+    command = 'yaml_as_dict'
+    for ref in refs:
+        command = command + "['" + ref + "']"
+    command = command + " = '" + val[1] + "'"
+
+    try:
+        exec(command)
+    except KeyError:
+        return None
+
+    file = File(path, dump(yaml_as_dict))
+    file_save(file, False)
+    return file
 
 
 """
 Deletes full one parameter in .yml config file
+Returns nothing
 """
 
 
-def yml_delete(path, key):
-    pass
+def yml_delete(path, refs):
+    yaml_as_dict = yml_load(path)
+    refs = refs.split('.')
+
+    command_del = 'del yaml_as_dict'
+    for ref in refs:
+        command_del = command_del + "['" + ref + "']"
+
+    exec(command_del)
+    file = File(path, dump(yaml_as_dict))
+    file_save(file, False)

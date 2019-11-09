@@ -1,7 +1,7 @@
 import unittest
 import subprocess
 import yaml
-from lib.io.io_yml import yml_load, yml_get, yml_create, yml_append
+from lib.io.io_yml import yml_load, yml_get, yml_create, yml_append, yml_change, yml_delete
 
 tmp_path = '/tmp/test_config.yml'
 tmp_path_malformed = '/tmp/test_malformed_config.yml'
@@ -112,5 +112,31 @@ class TestIoYml(unittest.TestCase):
 
         for arg in args:
             test(arg[0], arg[1])
+
+    def test_yml_change_should_correctly_change_value_of_yml_property(self):
+        create_test_yml_file()
+        ref = 'test.configuration.date'
+        new_value = '09-11-2019'
+        file_result = yml_change(tmp_path, (ref, new_value))
+
+        self.assertTrue(file_result.content.__contains__(new_value))
+        self.assertEqual(new_value, yml_get(tmp_path, ref))
+
+    def test_yml_change_should_return_None_when_reference_to_value_in_yml_not_exist(self):
+        create_test_yml_file()
+        ref = 'not.exist.ref'
+        new_value = 'some value'
+        result = yml_change(tmp_path, (ref, new_value))
+
+        self.assertEqual(None, result)
+
+    def test_yml_delete_should_remove_value_with_success(self):
+        create_test_yml_file()
+        ref = 'test.configuration.time'
+        self.assertIsNotNone(yml_get(tmp_path, ref))
+
+        yml_delete(tmp_path, ref)
+
+        self.assertIsNone(yml_get(tmp_path, ref))
 
     def tearDown(self) -> None: delete_test_yml_file()
