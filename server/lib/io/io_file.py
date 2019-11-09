@@ -27,7 +27,7 @@ If file not exist, this method will create one.
 
 def file_save(file, append=True):
     def write_file(mode):
-        with open(file.path, mode) as file_opened:
+        with open(file.path, mode, encoding='utf-8') as file_opened:
             file_opened.write(file.content)
             file_opened.close()
     if type(file) is not File:

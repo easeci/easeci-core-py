@@ -1,9 +1,7 @@
 import unittest
 import subprocess
-
 import yaml
-
-from lib.io.io_yml import yml_load, yml_get, yml_create
+from lib.io.io_yml import yml_load, yml_get, yml_create, yml_append
 
 tmp_path = '/tmp/test_config.yml'
 tmp_path_malformed = '/tmp/test_malformed_config.yml'
@@ -21,7 +19,9 @@ def create_test_malformed_yml_file():
     subprocess.check_call('cp ' + yml_test_file + ' ' + tmp_path_malformed, shell=True)
 
 
-def delete_test_yml_file():
+def delete_test_yml_file(custom_path=''):
+    if custom_path is not None and len(custom_path) > 0:
+        subprocess.check_output('rm ' + custom_path, shell=True)
     try:
         subprocess.check_output('rm ' + tmp_path, shell=True)
         subprocess.check_output('rm ' + tmp_path_malformed, shell=True)
@@ -84,6 +84,7 @@ class TestIoYml(unittest.TestCase):
         self.assertEqual(val, loaded_again)
         self.assertEqual(saved.path, path)
         self.assertEqual(saved.content, yaml.dump(val))
+        delete_test_yml_file(path)
 
     def test_yml_create_should_return_None_if_one_of_arguments_is_None(self):
         path = '/tmp/example.yml'
@@ -91,5 +92,25 @@ class TestIoYml(unittest.TestCase):
         saved = yml_create(path, val)
 
         self.assertEqual(None, saved)
+        delete_test_yml_file(path)
+
+    def test_yml_append_should_append_new_yml_property_with_success(self):
+        args = [
+            ('project.copyright', 'All rights reserved 2019'),
+            ('test.configuration.time.sec', 45),
+            ('property.deep.nested.test.is.this', 'test'),
+            ('project.licence.provider', 'Apache')
+        ]
+
+        def test(yml_refs, value):
+            append_result = yml_append(tmp_path, (yml_refs, value))
+            newly_updated = yml_load(tmp_path)
+            value_after_append = yml_get(tmp_path, yml_refs)
+
+            self.assertEqual(append_result, newly_updated)
+            self.assertTrue(str(value_after_append).__contains__(str(value)))
+
+        for arg in args:
+            test(arg[0], arg[1])
 
     def tearDown(self) -> None: delete_test_yml_file()

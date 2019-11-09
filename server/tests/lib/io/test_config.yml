@@ -1,7 +1,7 @@
 test:
   configuration:
     date: 08-11-2019
-    time: 22:16
+    time: 22.16
     country: Poland
     weather:
       - cold
