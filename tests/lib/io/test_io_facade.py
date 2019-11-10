@@ -1,6 +1,5 @@
 import os
 import unittest
-
 from lib.io.io_file import file_load, File, file_exist, file_save, file_delete, file_change
 
 file_path = '/tmp/test_file'
@@ -76,7 +75,7 @@ class TestIoFacade(unittest.TestCase):
 
         self.assertEqual(0, result)
 
-    def test_should_raise_if_wants_to_delete_not_existing_file(self):
+    def test_should_not_raise_if_wants_to_delete_not_existing_file_and_return_1_code(self):
         not_existing_path = '/not/existing/file'
         result = file_delete(not_existing_path)
 

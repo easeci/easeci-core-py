@@ -31,7 +31,7 @@ def file_save(file, append=True):
             file_opened.write(file.content)
             file_opened.close()
     if type(file) is not File:
-        raise IOError('Argument of this method must be type of lib.io.io_facade.File !')
+        raise IOError('Argument of this method must be type of lib.io.io_facade.File! But now is: ' + str(type(file)))
     if not file_exist(file.path):
         os.system('touch ' + file.path)
         file_save(file, append)
