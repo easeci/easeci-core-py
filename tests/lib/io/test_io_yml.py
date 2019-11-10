@@ -8,14 +8,15 @@ tmp_path_malformed = '/tmp/test_malformed_config.yml'
 
 
 def create_test_yml_file():
-    pwd = str(subprocess.check_output('pwd', shell=True))[2:-2]
-    yml_test_file = pwd + '/test_config.yml'
+    pwd = str(subprocess.check_output('pwd', shell=True))[2:-3]
+    print(pwd)
+    yml_test_file = pwd + '/tests/lib/io/test_config.yml'
     subprocess.check_call('cp ' + yml_test_file + ' ' + tmp_path, shell=True)
 
 
 def create_test_malformed_yml_file():
-    pwd = str(subprocess.check_output('pwd', shell=True))[2:-2]
-    yml_test_file = pwd + '/test_malformed_config.yml'
+    pwd = str(subprocess.check_output('pwd', shell=True))[2:-3]
+    yml_test_file = pwd + '/tests/lib/io/test_malformed_config.yml'
     subprocess.check_call('cp ' + yml_test_file + ' ' + tmp_path_malformed, shell=True)
 
 
@@ -31,7 +32,8 @@ def delete_test_yml_file(custom_path=''):
 
 class TestIoYml(unittest.TestCase):
 
-    def setUp(self) -> None: create_test_yml_file()
+    def setUp(self):
+        create_test_yml_file()
 
     def test_should_load_yml_file_with_success(self):
         result = yml_load(tmp_path)
@@ -92,7 +94,6 @@ class TestIoYml(unittest.TestCase):
         saved = yml_create(path, val)
 
         self.assertEqual(None, saved)
-        delete_test_yml_file(path)
 
     def test_yml_append_should_append_new_yml_property_with_success(self):
         args = [
@@ -139,4 +140,5 @@ class TestIoYml(unittest.TestCase):
 
         self.assertIsNone(yml_get(tmp_path, ref))
 
-    def tearDown(self) -> None: delete_test_yml_file()
+    def tearDown(self):
+        delete_test_yml_file()
