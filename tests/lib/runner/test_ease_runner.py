@@ -2,6 +2,7 @@ import unittest
 
 from lib.runner.runner import EaseRunner, RunnerException
 
+
 argv = ['any', '/tmp']
 argv_other = ['other', '/opt/ease']
 
@@ -28,3 +29,12 @@ class TestEaseRunner(unittest.TestCase):
 
         self.assertEqual(argv[1], instance.config_dir)
         self.assertNotEqual(argv_other[1], instance.config_dir)
+
+    def test_runner_should_be_instantiated_with_empty_pipeline_list(self):
+        instance = EaseRunner.get_instance(argv)
+
+        self.assertIsNotNone(instance.pipeline_executors)
+        self.assertEqual(0, len(instance.pipeline_executors))
+
+    def test_runner_should_start_workflow_after_get_required_arguments(self):
+        runner = EaseRunner.get_instance(argv)

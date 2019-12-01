@@ -2,3 +2,8 @@ main:
   paths:
     temp: /tmp/ease
     home: /usr/local/ease
+
+output:
+  queue:
+    max-size: 100
+  autopublishing: False
