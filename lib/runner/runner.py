@@ -16,6 +16,7 @@ class EaseRunner:
 
     def __init__(self, argv=None):
         self.argv = argv
+        self.pipeline_executors = []
         if len(argv) > 1:
             self.config_dir = argv[1]
         else:
@@ -32,6 +33,9 @@ class EaseRunner:
 
     def change_config_dir(self, path):
         self.config_dir = path
+
+    def execute_pipeline(self):
+        pass
 
 
 class RunnerException(Exception):
