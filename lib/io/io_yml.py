@@ -134,7 +134,6 @@ def yml_change(path, val):
         exec(command)
     except KeyError:
         return None
-
     file = File(path, dump(yaml_as_dict))
     file_save(file, False)
     return file

@@ -1,7 +1,15 @@
-import subprocess
 import os.path
 
-from lib.io.io_yml import yml_load, yml_get
+from lib.config.utils import pwd
+from lib.io.io_yml import yml_get
+from lib.log.logger import log
+import os.path
+
+"""
+MainConfigContext is singleton class that hold context for application
+By object of this class we can get configuration properties, preferences etc.
+The main configuration file is 'general.yml' which must be places in workspace directory
+"""
 
 
 class MainConfigContext:
@@ -14,7 +22,7 @@ class MainConfigContext:
     Ease will scan this paths in searching for general.yml
     """
     _paths = [
-        '/usr/local/ease',
+        '/usr/local/share/ease',
         '/home/ease'
     ]
 
@@ -29,13 +37,31 @@ class MainConfigContext:
                 cls.__instance._paths = [workspace] + cls.__instance._paths
         return cls.__instance
 
+    """
+    Search for configuration file, similar to scan_paths() but
+     * is using only if user specify custom path to workspace
+     This iterates through 'paths' list till the general.yml file found
+    """
+    def search_config(self, workspace):
+        paths = [
+            workspace + '/' + self._conf_file_name,
+            workspace + '/easeci/' + self._conf_file_name
+        ]
+        for current in paths:
+            res = os.path.exists(current)
+            if res is True:
+                self._config_file_path = current
+                log('main configuration file correctly detected')
+        if self._config_file_path is None:
+            log('main configuration file not found!', err=True)
+
     def all_paths(self):
-        pwd = subprocess.check_output('pwd', shell=True)
-        path = pwd.decode('utf-8')
-        return self._paths + [path[:-1] + '/config']
+        path = pwd()
+        return self._paths + [path.strip() + '/config']
 
     """
     This method scans path in order to searching for config general.yml file
+    * method is used only if user not specified path in startup
     If path is found this returns True
     If path is not found returns False
     """
@@ -48,13 +74,16 @@ class MainConfigContext:
         for path in self.all_paths():
             if is_config_exist(path):
                 self._config_file_path = path + '/' + self._conf_file_name
-                print(f'==> [EaseCI] configuration detected: {self._config_file_path}')
+                log(f"configuration detected: {self._config_file_path}")
                 return True
         return False
 
-    def read_config_file(self):
-        self._config_file = yml_load(self._config_file_path)
-        return self._config_file
-
     def get_property(self, refs):
-        return yml_get(self._config_file_path, refs)
+        if self._config_file_path is not None and refs is not None:
+            return yml_get(self._config_file_path, refs)
+
+    def info(self):
+        return {
+            'general': self._config_file_path,
+            'workspace': self._config_file_path[:-12]
+        }

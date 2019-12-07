@@ -15,6 +15,10 @@ class File:
         self.path = path
         self.content = content
 
+    def __str__(self):
+        return f'[PATH]\n{self.path}\n' \
+               f'[CONTENT]\n{self.content}'
+
 
 """
 First argument must be of type lib.io.io_facade.File

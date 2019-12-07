@@ -35,6 +35,3 @@ class TestEaseRunner(unittest.TestCase):
 
         self.assertIsNotNone(instance.pipeline_executors)
         self.assertEqual(0, len(instance.pipeline_executors))
-
-    def test_runner_should_start_workflow_after_get_required_arguments(self):
-        runner = EaseRunner.get_instance(argv)

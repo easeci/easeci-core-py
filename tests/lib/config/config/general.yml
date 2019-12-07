@@ -1,11 +1,8 @@
-# This file is here for unit tests!
-
 main:
   paths:
+    home: /tmp/ease/easeci
     temp: /tmp/ease
-    home: /usr/local/ease
-
 output:
+  autopublishing: false
   queue:
     max-size: 100
-  autopublishing: False
