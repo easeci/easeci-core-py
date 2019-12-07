@@ -6,8 +6,8 @@ from tests.lib.config.utils import generate_fake_config
 
 
 class TestMainConfig(unittest.TestCase):
-    _config_path = '/tmp/general.yml'
-    _dir = '/tmp'
+    _config_path = '/tmp/ease/general.yml'
+    _dir = '/tmp/ease'
 
     def setUp(self):
         file = generate_fake_config()
@@ -42,6 +42,29 @@ class TestMainConfig(unittest.TestCase):
         result = config.scan_paths()
 
         self.assertTrue(result)
+
+    def test_should_get_property_returns_value_with_success_when_initialize_MainConfigContext_with_specified_path(self):
+        config = MainConfigContext.get_instance(self._dir)
+        config.scan_paths()
+        result = config.get_property('main.paths.temp')
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result, '/tmp/ease')
+
+    def test_should_get_property_returns_value_with_success_when_initialize_MainConfigContext_with_no_specified_path(self):
+        config = MainConfigContext.get_instance()
+        config.scan_paths()
+        result = config.get_property('main.paths.temp')
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result, '/tmp/ease')
+
+    def test_should_info_returns_string_value_of_context_state(self):
+        config = MainConfigContext.get_instance()
+        config.scan_paths()
+        result = config.info()
+
+        self.assertIsNotNone(result)
 
     def tearDown(self):
         file_delete(self._config_path)

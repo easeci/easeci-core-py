@@ -1,9 +1,10 @@
 main:
+  mount:
+    copy: true
   paths:
+    home: /home/karol/dev/ease-ci/easeci-core/workspace
     temp: /tmp/ease
-    home: /usr/local/ease
-
 output:
+  autopublishing: false
   queue:
     max-size: 100
-  autopublishing: False

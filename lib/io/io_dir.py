@@ -19,7 +19,7 @@ Return False if directory not created
 
 def dir_create(path):
     try:
-        return execute('mkdir ' + path)
+        return execute('mkdir -p ' + path)
     except subprocess.CalledProcessError:
         return False
 
