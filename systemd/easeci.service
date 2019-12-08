@@ -1,0 +1,10 @@
+[Unit]
+Description=EaseCI backend application service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/karol/dev/ease-ci/easeci-core/ease_ci_app.py 
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
