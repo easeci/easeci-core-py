@@ -3,7 +3,7 @@ Description=EaseCI backend application service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/karol/dev/ease-ci/easeci-core/ease_ci_app.py 
+ExecStart=/usr/bin/uwsgi --ini /home/karol/dev/ease-ci/easeci-core/uwsgi.ini
 StandardInput=tty-force
 
 [Install]
