@@ -22,7 +22,7 @@ fi
 UNIT="$(pwd)/systemd/easeci.service"
 UNIT_TARGET="/etc/systemd/system"
 
-if [[ ! -z "$WORKSPACE" ]];
+if [[ -n "$WORKSPACE" ]];
 then
   echo "EaseCI workspace specified in ${WORKSPACE}"
   sed -i "s#EASECI_HOME#$WORKSPACE#g" "${UNIT}"
@@ -30,7 +30,11 @@ else
   sed -i "s#EASECI_HOME##g" "${UNIT}"
 fi
 
-sed -i "s#START#$(pwd)/ease_ci_app.py#g" "${UNIT}"
+sed -i "s#START#$(pwd)/app/main.py#g" "${UNIT}"
+
+python3 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
 
 cp "${UNIT}" "${UNIT_TARGET}"
 systemctl daemon-reload
