@@ -11,7 +11,7 @@ fi
 PYTHON=$(echo "$(python3 -V)" | awk '{print $2}' | cut -d '.' -f 1-3)
 VERSION=$(echo "$PYTHON" | tr --delete .)
 
-MIN_PY_VER='3.7.5'
+MIN_PY_VER='3.7.3'
 
 if [[ "$VERSION" -lt $(echo $MIN_PY_VER | tr --delete .) ]];
 then
@@ -19,7 +19,8 @@ then
   exit 1
 fi
 
-UNIT="$(pwd)/systemd/easeci.service"
+CURRENT_DIR=$(pwd)
+UNIT="${CURRENT_DIR}/systemd/easeci.service"
 UNIT_TARGET="/etc/systemd/system"
 
 if [[ -n "$WORKSPACE" ]];
@@ -30,12 +31,16 @@ else
   sed -i "s#EASECI_HOME##g" "${UNIT}"
 fi
 
-sed -i "s#START#$(pwd)/app/main.py#g" "${UNIT}"
-
+# Python environment preparation
 python3 -m venv venv
-. venv/bin/activate
-pip install -r requirements.txt
+source venv/bin/activate
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
+pip3 install uWSGI
+
+RUN_COMMAND="$(whereis uwsgi | cut -d ' ' -f 2) --ini ${CURRENT_DIR}/uwsgi.ini"
+sed -i "s#EASECI_RUN#${RUN_COMMAND}#g" "${UNIT}"
 
 cp "${UNIT}" "${UNIT_TARGET}"
-systemctl daemon-reload
-systemctl start easeci
+#systemctl daemon-reload
+#systemctl start easeci

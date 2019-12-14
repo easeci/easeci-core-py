@@ -3,7 +3,7 @@ Description=EaseCI backend application service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/uwsgi --ini /home/karol/dev/ease-ci/easeci-core/uwsgi.ini
+ExecStart=EASECI_RUN EASECI_HOME
 StandardInput=tty-force
 
 [Install]
