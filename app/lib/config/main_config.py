@@ -82,6 +82,9 @@ class MainConfigContext:
         if self._config_file_path is not None and refs is not None:
             return yml_get(self._config_file_path, refs)
 
+    def change_general(self, general_path):
+        self._config_file_path = general_path
+
     def info(self):
         return {
             'general': self._config_file_path,

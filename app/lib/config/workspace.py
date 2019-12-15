@@ -26,6 +26,14 @@ class WorkspaceContext:
         if workspace is None:
             raise WorkspaceException('Workspace must be initialized value with correct path!')
         log(f"workspace initialize in: {workspace}")
+
+        """
+        If in workspace just set, general.yml file exists, update path to this file
+        """
+        general_path = workspace + '/general.yml'
+        if os.path.exists(general_path):
+            MainConfigContext.get_instance().change_general(general_path)
+
         cls._workspace = workspace
         if cls.__instance is None:
             cls.__instance = cls.__new__(cls)

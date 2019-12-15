@@ -9,6 +9,11 @@ argv_other = ['other', '/opt/ease']
 
 class TestEaseRunner(unittest.TestCase):
 
+    def setUp(self):
+        # Hack, override config_dir to test make sense
+        # Why? Because in other tests config_dir variable is set, a
+        EaseRunner.get_instance().config_dir = argv[1]
+
     def test_should_correctly_instantiate_singleton_class_get_instance_should_always_get_same_result(self):
         instance = EaseRunner.get_instance(argv)
         instance_b = EaseRunner.get_instance()
