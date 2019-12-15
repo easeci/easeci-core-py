@@ -2,16 +2,31 @@ import abc
 from enum import Enum
 from queue import Queue
 from datetime import datetime
+from app.lib.config.main_config import MainConfigContext
 
 
 class OutputPublisher:
-    _max_queue_size = 100     # TODO inject this value from general.yml when settings context will be ready
-    _max_consumers_size = 15  # TODO
-    _autopublishing = False   # TODO
+    _max_queue_size = None
+    _max_consumers_size = None
+    _autopublishing = None
 
     def __init__(self):
         self.consumers = set()
         self.event_queue = Queue()
+        self.init_params()
+
+    def init_params(self):
+        ctx = MainConfigContext.get_instance()
+        self._max_queue_size = ctx.get_property('output.queue.max-size')
+        self._max_consumers_size = ctx.get_property('output.consumer.max-size')
+        self._autopublishing = ctx.get_property('output.autopublishing')
+
+    def info(self):
+        return {
+            'max_queue_size': self._max_queue_size,
+            'max_consumers_size': self._max_consumers_size,
+            'autopublishing': self._autopublishing
+        }
 
     def add_consumer(self, consumer):
         if not issubclass(type(consumer), OutputConsumer):

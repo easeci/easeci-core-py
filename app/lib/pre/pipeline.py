@@ -1,0 +1,2 @@
+class PipelineWrapper:
+    pass

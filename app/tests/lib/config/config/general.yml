@@ -3,6 +3,8 @@ main:
     home: /tmp/ease/easeci
     temp: /tmp/ease
 output:
-  autopublishing: false
+  autopublishing: False
   queue:
     max-size: 100
+  consumer:
+    max-size: 15

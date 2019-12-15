@@ -1,6 +1,9 @@
 import unittest
 
+from app.lib.config.main_config import MainConfigContext
+from app.lib.config.utils import pwd
 from app.lib.output.output_method import OutputPublisher, OutputEvent, TerminalOutputConsumer
+from app.lib.runner.runner import EaseRunner
 from app.tests.lib.output.utils import prepare_event, prepare_event_sequence
 
 
@@ -119,3 +122,14 @@ class TestOutput(unittest.TestCase):
         self.assertTrue(consumer._received)
         self.assertEqual(0, publisher.event_queue.qsize())
         self.assertEqual(1, len(publisher.consumers))
+
+    def test_should_initialize_object_with_parameters_from_general_yml_file(self):
+        path = str(pwd()) + '/app/tests/lib/config/config'
+        EaseRunner.get_instance(['', path])
+        MainConfigContext.get_instance()
+        publisher = OutputPublisher()
+        info = publisher.info()
+
+        self.assertEqual(100, info['max_queue_size'])
+        self.assertEqual(15, info['max_consumers_size'])
+        self.assertFalse(info['autopublishing'])
