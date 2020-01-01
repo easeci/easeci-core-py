@@ -24,3 +24,11 @@ def prepare_event_sequence():
             OutputEvent(rand_signal(), 'Building code', 'Code was built in this step'),
             OutputEvent(rand_signal(), 'Publish on server', 'Artifact was published on server in this step')
     ]
+
+
+def prepare_minimalistic_pipeline():
+    return {
+        'pipeline': {
+
+        }
+    }
